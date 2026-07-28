@@ -249,15 +249,15 @@
                     <i class="fa-brands fa-telegram text-xl text-white"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-sm">کانال آموزش هوش مصنوعی</h4>
+                    <h4 class="font-bold text-sm">اینجا جای تبلیغات شماست!</h4>
                     <p class="text-xs text-gray-400">@AI_Tutorials</p>
                 </div>
             </div>
             <p class="text-sm text-gray-300 leading-relaxed mb-3">
-                برای یادگیری رایگان ساخت چنین ربات‌هایی و کسب درآمد دلاری، همین الان در کانال ما عضو شوید! 🚀
+               برای رزرو تبیلفات در ربات کافیه از طریق دکمه زیر در ارتباط باشید 🚀
             </p>
             <a href="#" class="block text-center bg-blue-500/20 text-blue-400 py-2 rounded-lg text-sm font-bold border border-blue-500/30">
-                مشاهده کانال
+               مشاهده و رزرو تبلیغات
             </a>
         </div>
     </div>
@@ -376,7 +376,7 @@
         // =========================================
         
         // 🛑 هر بار که گوگل کولب را اجرا می‌کنی، لینک جدید را اینجا بگذار:
-        const AI_SERVER_URL = "https://10c6a010bba1fd8c2c.gradio.live/"; 
+        const AI_SERVER_URL = "https://e7eba01b20a6305f5f.gradio.live/"; 
 
         async function processAudio(mode) {
             let isValid = false;
@@ -424,21 +424,21 @@
                     
                     queueStatus.innerText = "در حال تولید صدا... (ممکن است چند ثانیه طول بکشد)";
                     
+                    // تنظیم تایم‌اوت برای جلوگیری از گیر کردن بی‌نهایت
+                    const timeoutPromise = new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error("سرور هوش مصنوعی پاسخ نداد (Timeout)")), 40000)
+                    );
+
                     // 1. اتصال به سرور
                     const app = await window.gradioClient(AI_SERVER_URL);
                     
-                    // 2. ارسال اطلاعات و دریافت نتیجه
-                    const result = await app.predict(endpointIndex, inputs);
+                    // 2. ارسال اطلاعات و دریافت نتیجه (با تایم‌اوت 40 ثانیه‌ای)
+                    const result = await Promise.race([
+                        app.predict(endpointIndex, inputs),
+                        timeoutPromise
+                    ]);
 
-                    // 3. استخراج لینک فایل صوتی (Gradio فایل‌ها را به صورت آبجکت برمی‌گرداند)
-                    const audioOutput = result.data[0];
-                    const audioUrl = typeof audioOutput === 'string' ? audioOutput : audioOutput.url;
-                    
-                    // 4. نمایش باکس صدا و پخش
-                    audioPlayer.src = audioUrl;
-                    overlay.style.display = 'none';
-                    resultSection.classList.remove('hidden');
-                    
+                    // 3. استخراج لینک فایل صوتی
                     // ایجاد ویبره موفقیت در گوشی کاربر
                     if (tg && tg.HapticFeedback) {
                         tg.HapticFeedback.notificationOccurred('success');
