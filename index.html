@@ -10,102 +10,32 @@
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     
     <style>
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-        }
-
-        .bg-shapes {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden;
-        }
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.5;
-            animation: float 20s infinite alternate ease-in-out;
-        }
+        body { font-family: 'Vazirmatn', sans-serif; background-color: #0f172a; color: #f8fafc; overflow-x: hidden; margin: 0; padding: 0; }
+        .bg-shapes { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .shape { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.5; animation: float 20s infinite alternate ease-in-out; }
         .shape-1 { width: 300px; height: 300px; background: #6366f1; top: -10%; left: -10%; }
         .shape-2 { width: 400px; height: 400px; background: #ec4899; bottom: -20%; right: -10%; animation-delay: -5s; }
         .shape-3 { width: 200px; height: 200px; background: #8b5cf6; top: 40%; left: 50%; animation-delay: -10s; }
+        @keyframes float { 0% { transform: translate(0, 0) rotate(0deg); } 100% { transform: translate(50px, 50px) rotate(20deg); } }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(50px, 50px) rotate(20deg); }
-        }
+        .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); border-radius: 16px; }
+        .glass-input { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 12px; transition: all 0.3s ease; }
+        .glass-input:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3); }
 
-        .glass {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            border-radius: 16px;
-        }
+        .tab-btn { transition: all 0.3s ease; }
+        .tab-btn.active { background: rgba(99, 102, 241, 0.8); color: white; border-color: rgba(99, 102, 241, 1); }
+        .btn-primary { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); transition: transform 0.2s ease; }
+        .btn-primary:active { transform: scale(0.98); }
 
-        .glass-input {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-        .glass-input:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
-        }
+        /* استایل رکورد صدا */
+        .record-btn { transition: all 0.3s ease; }
+        .record-btn.recording { background: #ef4444; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-        .tab-btn {
-            transition: all 0.3s ease;
-        }
-        .tab-btn.active {
-            background: rgba(99, 102, 241, 0.8);
-            color: white;
-            border-color: rgba(99, 102, 241, 1);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        #ad-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 50;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .loader {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-left-color: #6366f1;
-            border-radius: 50%;
-            width: 40px; height: 40px;
-            animation: spin 1s linear infinite;
-        }
+        #ad-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); z-index: 100; justify-content: center; align-items: center; flex-direction: column; }
+        .loader { border: 4px solid rgba(255, 255, 255, 0.1); border-left-color: #6366f1; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        #toast {
-            display: none;
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: #ef4444; color: white; padding: 10px 20px;
-            border-radius: 8px; z-index: 100; font-size: 14px;
-        }
+        #toast { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; padding: 10px 20px; border-radius: 8px; z-index: 200; font-size: 14px; }
     </style>
 </head>
 <body class="text-sm md:text-base">
@@ -115,17 +45,13 @@
         <div class="shape shape-2"></div>
         <div class="shape shape-3"></div>
     </div>
-
     <div id="toast">خطایی رخ داد!</div>
 
     <div class="min-h-screen flex flex-col p-4 pb-20 max-w-md mx-auto relative z-10">
         
-        <!-- Header -->
         <header class="flex items-center justify-between mb-8 mt-4">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg">
-                    <i class="fa-solid fa-microphone-lines text-xl"></i>
-                </div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg"><i class="fa-solid fa-microphone-lines text-xl"></i></div>
                 <div>
                     <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">VoiceForge AI</h1>
                     <p class="text-xs text-gray-400" id="user-greeting">کاربر عزیز، خوش آمدید</p>
@@ -134,15 +60,9 @@
         </header>
 
         <div class="glass p-1 flex rounded-xl mb-6 text-xs sm:text-sm">
-            <button onclick="switchTab('tts')" id="tab-tts" class="tab-btn active flex-1 py-2 rounded-lg text-center font-medium border border-transparent">
-                <i class="fa-solid fa-keyboard ml-1"></i> متن به صدا
-            </button>
-            <button onclick="switchTab('custom')" id="tab-custom" class="tab-btn flex-1 py-2 rounded-lg text-center font-medium border border-transparent text-gray-400">
-                <i class="fa-solid fa-user-plus ml-1"></i> صدای کاستوم
-            </button>
-            <button onclick="switchTab('v2v')" id="tab-v2v" class="tab-btn flex-1 py-2 rounded-lg text-center font-medium border border-transparent text-gray-400">
-                <i class="fa-solid fa-wave-square ml-1"></i> تغییر صدا
-            </button>
+            <button onclick="switchTab('tts')" id="tab-tts" class="tab-btn active flex-1 py-2 rounded-lg text-center font-medium border border-transparent"><i class="fa-solid fa-keyboard ml-1"></i> متن به صدا</button>
+            <button onclick="switchTab('custom')" id="tab-custom" class="tab-btn flex-1 py-2 rounded-lg text-center font-medium border border-transparent text-gray-400"><i class="fa-solid fa-user-plus ml-1"></i> صدای کاستوم</button>
+            <button onclick="switchTab('v2v')" id="tab-v2v" class="tab-btn flex-1 py-2 rounded-lg text-center font-medium border border-transparent text-gray-400"><i class="fa-solid fa-wave-square ml-1"></i> تغییر صدا</button>
         </div>
 
         <div id="section-tts" class="flex-1 flex flex-col gap-4">
@@ -150,14 +70,10 @@
                 <label class="block text-gray-300 mb-2 text-sm">متن خود را بنویسید:</label>
                 <textarea id="tts-input" rows="4" class="glass-input w-full p-3 resize-none" placeholder="سلام، به استودیوی هوش مصنوعی خوش آمدید..."></textarea>
             </div>
-
             <div class="glass p-4">
                 <label class="block text-gray-300 mb-2 text-sm">انتخاب صدای گوینده:</label>
                 <div class="relative custom-dropdown">
-                    <div class="glass-input w-full p-3 flex justify-between items-center cursor-pointer dropdown-selected">
-                        <span>فرید (مرد - فارسی)</span>
-                        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
-                    </div>
+                    <div class="glass-input w-full p-3 flex justify-between items-center cursor-pointer dropdown-selected"><span>فرید (مرد - فارسی)</span><i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i></div>
                     <ul class="absolute z-50 w-full mt-2 glass hidden rounded-xl overflow-hidden dropdown-options opacity-0 transition-opacity duration-200">
                         <li class="p-3 hover:bg-indigo-500/30 cursor-pointer text-gray-200 border-b border-white/10" data-value="fa-IR-FaridNeural">فرید (مرد - فارسی)</li>
                         <li class="p-3 hover:bg-indigo-500/30 cursor-pointer text-gray-200 border-b border-white/10" data-value="fa-IR-DilaraNeural">دلارا (زن - فارسی)</li>
@@ -166,149 +82,132 @@
                     <input type="hidden" id="tts-voice" value="fa-IR-FaridNeural">
                 </div>
             </div>
-
-            <button onclick="processAudio('tts')" class="btn-primary w-full py-4 rounded-xl font-bold text-lg mt-auto shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> تولید صدا
-            </button>
-        </div>
-
-        <div id="section-v2v" class="flex-1 hidden flex-col gap-4">
-            <div class="glass p-6 flex flex-col items-center justify-center border-dashed border-2 border-indigo-500/50 rounded-xl cursor-pointer" onclick="document.getElementById('file-upload').click()">
-                <div class="w-16 h-16 rounded-full bg-indigo-500/20 flex items-center justify-center mb-3">
-                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-indigo-400"></i>
-                </div>
-                <p class="text-gray-300 font-medium">صدای خود را آپلود کنید</p>
-                <p class="text-xs text-gray-500 mt-1">فرمت‌های پشتیبانی شده: MP3, WAV (حداکثر 10 مگابایت)</p>
-                <input type="file" id="file-upload" class="hidden" accept="audio/*" onchange="handleFileSelect(event)">
-                <p id="file-name" class="text-sm text-indigo-400 mt-3 hidden"></p>
-            </div>
-
-            <div class="glass p-4">
-                <label class="block text-gray-300 mb-2 text-sm">انتخاب مدل صدای هدف (RVC):</label>
-                <div class="relative custom-dropdown">
-                    <div class="glass-input w-full p-3 flex justify-between items-center cursor-pointer dropdown-selected">
-                        <span>کاراکتر ۱ (مرد بم)</span>
-                        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
-                    </div>
-                    <ul class="absolute z-50 w-full mt-2 glass hidden rounded-xl overflow-hidden dropdown-options opacity-0 transition-opacity duration-200">
-                        <li class="p-3 hover:bg-indigo-500/30 cursor-pointer text-gray-200 border-b border-white/10" data-value="model1">کاراکتر ۱ (مرد بم)</li>
-                        <li class="p-3 hover:bg-indigo-500/30 cursor-pointer text-gray-200 border-b border-white/10" data-value="model2">کاراکتر ۲ (زن جوان)</li>
-                        <li class="p-3 hover:bg-indigo-500/30 cursor-pointer text-gray-200" data-value="model3">خواننده پاپ</li>
-                    </ul>
-                    <input type="hidden" id="v2v-model" value="model1">
-                </div>
-            </div>
-
-            <button onclick="processAudio('v2v')" class="btn-primary w-full py-4 rounded-xl font-bold text-lg mt-auto shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-microphone-lines"></i> تغییر و شبیه‌سازی صدا
-            </button>
+            <button onclick="processAudio('tts')" class="btn-primary w-full py-4 rounded-xl font-bold text-lg mt-auto shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> تولید صدا</button>
         </div>
 
         <div id="section-custom" class="flex-1 hidden flex-col gap-4">
-            <div class="glass p-6 flex flex-col items-center justify-center border-dashed border-2 border-pink-500/50 rounded-xl cursor-pointer hover:bg-pink-500/10 transition-colors" onclick="document.getElementById('sample-upload').click()">
-                <div class="w-16 h-16 rounded-full bg-pink-500/20 flex items-center justify-center mb-3 shadow-lg shadow-pink-500/20">
-                    <i class="fa-solid fa-microphone text-2xl text-pink-400"></i>
+            <div class="glass p-5">
+                <label class="block text-gray-300 mb-2 text-sm text-center">ضبط یا آپلود نمونه صدای شما (۳ تا ۵ ثانیه)</label>
+                <div class="flex gap-2">
+                    <!-- دکمه ضبط صدا -->
+                    <button id="record-btn" onclick="toggleRecording()" class="record-btn flex-1 py-3 bg-gray-700/50 hover:bg-gray-700 rounded-xl flex flex-col items-center justify-center border border-gray-600">
+                        <i id="record-icon" class="fa-solid fa-microphone text-xl text-pink-400 mb-1"></i>
+                        <span id="record-text" class="text-xs text-gray-300">ضبط صدا</span>
+                    </button>
+                    <!-- دکمه آپلود فایل -->
+                    <button onclick="document.getElementById('sample-upload').click()" class="flex-1 py-3 bg-gray-700/50 hover:bg-gray-700 rounded-xl flex flex-col items-center justify-center border border-gray-600">
+                        <i class="fa-solid fa-cloud-arrow-up text-xl text-indigo-400 mb-1"></i>
+                        <span class="text-xs text-gray-300">آپلود فایل</span>
+                    </button>
+                    <input type="file" id="sample-upload" class="hidden" accept="audio/*" onchange="handleSampleSelect(event)">
                 </div>
-                <p class="text-gray-300 font-medium">آپلود ۳ ثانیه نمونه صدای شما</p>
-                <p class="text-xs text-gray-500 mt-1">یک فایل کوتاه و واضح (بدون نویز) انتخاب کنید</p>
-                <input type="file" id="sample-upload" class="hidden" accept="audio/*" onchange="handleSampleSelect(event)">
-                <p id="sample-name" class="text-sm text-pink-400 mt-3 hidden"></p>
+                
+                <!-- پیش‌نمایش صدای ضبط/آپلود شده -->
+                <div id="custom-audio-preview" class="mt-4 hidden text-center bg-gray-800/50 p-2 rounded-lg border border-gray-600">
+                    <p id="sample-name" class="text-xs text-pink-400 mb-2">صدای شما آماده است</p>
+                    <audio id="recorded-audio" controls class="w-full h-8"></audio>
+                </div>
             </div>
 
             <div class="glass p-4">
                 <label class="block text-gray-300 mb-2 text-sm">متنی که می‌خواهید با این صدا خوانده شود:</label>
                 <textarea id="custom-text-input" rows="3" class="glass-input w-full p-3 resize-none" placeholder="سلام، این صدای شبیه‌سازی شده من است..."></textarea>
             </div>
+            <button onclick="processAudio('custom')" class="btn-primary w-full py-4 rounded-xl font-bold text-lg mt-auto shadow-lg shadow-pink-500/30 flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);"><i class="fa-solid fa-bolt"></i> ساخت صدای سفارشی</button>
+        </div>
 
-            <button onclick="processAudio('custom')" class="btn-primary w-full py-4 rounded-xl font-bold text-lg mt-auto shadow-lg shadow-pink-500/30 flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);">
-                <i class="fa-solid fa-bolt"></i> ساخت صدای سفارشی
-            </button>
+        <div id="section-v2v" class="flex-1 hidden flex-col gap-4">
+            <div class="glass p-6 flex flex-col items-center justify-center border-dashed border-2 border-indigo-500/50 rounded-xl cursor-pointer" onclick="document.getElementById('file-upload').click()">
+                <div class="w-16 h-16 rounded-full bg-indigo-500/20 flex items-center justify-center mb-3"><i class="fa-solid fa-cloud-arrow-up text-2xl text-indigo-400"></i></div>
+                <p class="text-gray-300 font-medium">آپلود صدای مبدأ</p>
+                <input type="file" id="file-upload" class="hidden" accept="audio/*" onchange="handleFileSelect(event)">
+                <p id="file-name" class="text-sm text-indigo-400 mt-3 hidden"></p>
+            </div>
+            <div class="glass p-4">
+                <label class="block text-gray-300 mb-2 text-sm">انتخاب مدل صدای هدف:</label>
+                <div class="relative custom-dropdown">
+                    <div class="glass-input w-full p-3 flex justify-between items-center cursor-pointer dropdown-selected"><span>کاراکتر ۱ (مرد بم)</span><i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i></div>
+                    <ul class="absolute z-50 w-full mt-2 glass hidden rounded-xl overflow-hidden dropdown-options opacity-0 transition-opacity duration-200">
+                        <li class="p-3 hover:bg-indigo-500/30 cursor-pointer text-gray-200 border-b border-white/10" data-value="Model_A">کاراکتر ۱ (مرد بم)</li>
+                        <li class="p-3 hover:bg-indigo-500/30 cursor-pointer text-gray-200" data-value="Model_B">کاراکتر ۲ (زن جوان)</li>
+                    </ul>
+                    <input type="hidden" id="v2v-model" value="Model_A">
+                </div>
+            </div>
+            <button onclick="processAudio('v2v')" class="btn-primary w-full py-4 rounded-xl font-bold text-lg mt-auto shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-microphone-lines"></i> تغییر و شبیه‌سازی صدا</button>
         </div>
 
         <div id="result-section" class="glass p-4 mt-6 hidden">
-            <h3 class="text-indigo-400 font-bold mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-headphones"></i> صدای خروجی شما:
-            </h3>
-            <audio id="audio-player" controls class="w-full rounded-lg outline-none">
-                <source src="" type="audio/mpeg">
-                مرورگر شما از پخش صدا پشتیبانی نمی‌کند.
-            </audio>
+            <h3 class="text-indigo-400 font-bold mb-3 flex items-center gap-2"><i class="fa-solid fa-headphones"></i> صدای خروجی شما:</h3>
+            <audio id="audio-player" controls class="w-full rounded-lg outline-none"></audio>
         </div>
     </div>
 
     <div id="ad-overlay">
-        <div class="loader mb-6"></div>
+        <div class="loader mb-4"></div>
         <h2 class="text-xl font-bold mb-2">در حال پردازش صدا...</h2>
-        <p class="text-gray-400 mb-8 text-sm" id="queue-status">شما در صف سرور هستید...</p>
+        <p class="text-gray-400 mb-6 text-sm" id="queue-status">ارتباط با سرور هوش مصنوعی...</p>
         
-        <!-- Telegram Ad Mockup -->
+        <!-- دکمه لغو عملیات -->
+        <button onclick="cancelProcessing()" class="mb-8 px-6 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition-colors text-sm">
+            <i class="fa-solid fa-xmark mr-1"></i> لغو عملیات
+        </button>
+        
+        <!-- باکس تبلیغات -->
         <div class="glass p-4 w-11/12 max-w-sm relative overflow-hidden">
             <div class="absolute top-0 right-0 bg-yellow-500/20 text-yellow-500 text-xs px-2 py-1 rounded-bl-lg">آگهی اسپانسر</div>
             <div class="flex items-center gap-3 mb-3 mt-2">
-                <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center">
-                    <i class="fa-brands fa-telegram text-xl text-white"></i>
-                </div>
-                <div>
-                    <h4 class="font-bold text-sm">اینجا جای تبلیغات شماست!</h4>
-                    <p class="text-xs text-gray-400">@AI_Tutorials</p>
-                </div>
+                <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center"><i class="fa-brands fa-telegram text-xl text-white"></i></div>
+                <div><h4 class="font-bold text-sm">کانال آموزش هوش مصنوعی</h4><p class="text-xs text-gray-400">@AI_Tutorials</p></div>
             </div>
-            <p class="text-sm text-gray-300 leading-relaxed mb-3">
-               برای رزرو تبیلفات در ربات کافیه از طریق دکمه زیر در ارتباط باشید 🚀
-            </p>
-            <a href="#" class="block text-center bg-blue-500/20 text-blue-400 py-2 rounded-lg text-sm font-bold border border-blue-500/30">
-               مشاهده و رزرو تبلیغات
-            </a>
+            <p class="text-sm text-gray-300 leading-relaxed mb-3">برای یادگیری رایگان ساخت چنین ربات‌هایی، همین الان در کانال ما عضو شوید! 🚀</p>
+            <a href="#" class="block text-center bg-blue-500/20 text-blue-400 py-2 rounded-lg text-sm font-bold border border-blue-500/30">مشاهده کانال</a>
         </div>
     </div>
 
-    <!-- اضافه کردن کتابخانه اتصال به هوش مصنوعی -->
     <script type="module">
-        import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client@0.1.4/dist/index.min.js";
-        window.gradioClient = client;
+        // استفاده از نسخه ۱ به بالا برای جلوگیری از تداخل ورژن
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+        window.GradioClient = Client;
     </script>
 
     <script>
-        // Initialize Telegram Web App
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Expand to full height
-
-        // Set user greeting if available
+        tg.expand();
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('user-greeting').innerText = `سلام ${tg.initDataUnsafe.user.first_name}، خوش آمدید`;
         }
 
-        // Custom Toast Function
-        function showToast(message) {
+        // ==========================================
+        // 🛑 لینک جدید کولب را فقط اینجا قرار بده 🛑
+        // ==========================================
+        const AI_SERVER_URL = "https://d089e562c3409a919a.gradio.live"; 
+        
+        let isProcessingCancelled = false; // پرچم دکمه لغو
+        let customVoiceFile = null; // ذخیره فایل صدای ضبط شده/آپلود شده
+
+        function showToast(message, isError = true) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
+            toast.style.background = isError ? '#ef4444' : '#10b981';
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 3000);
         }
 
-        // Tab Switching Logic
         function switchTab(tab) {
-            const tabs = ['tts', 'v2v', 'custom'];
-            
-            tabs.forEach(t => {
+            ['tts', 'v2v', 'custom'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 const sec = document.getElementById(`section-${t}`);
-                
                 if (t === tab) {
-                    btn.classList.add('active', 'text-white');
-                    btn.classList.remove('text-gray-400');
-                    sec.classList.remove('hidden');
-                    sec.classList.add('flex');
+                    btn.classList.add('active', 'text-white'); btn.classList.remove('text-gray-400');
+                    sec.classList.remove('hidden'); sec.classList.add('flex');
                 } else {
-                    btn.classList.remove('active', 'text-white');
-                    btn.classList.add('text-gray-400');
-                    sec.classList.add('hidden');
-                    sec.classList.remove('flex');
+                    btn.classList.remove('active', 'text-white'); btn.classList.add('text-gray-400');
+                    sec.classList.add('hidden'); sec.classList.remove('flex');
                 }
             });
         }
 
-        // Dropdown Logic
         document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
             const selected = dropdown.querySelector('.dropdown-selected');
             const optionsBox = dropdown.querySelector('.dropdown-options');
@@ -320,17 +219,12 @@
             selected.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isOpen = !optionsBox.classList.contains('hidden');
-                
-                // بستن بقیه منوها
                 document.querySelectorAll('.dropdown-options').forEach(box => {
-                    box.classList.add('hidden');
-                    box.classList.remove('opacity-100');
+                    box.classList.add('hidden'); box.classList.remove('opacity-100');
                     box.previousElementSibling.querySelector('i').classList.remove('rotate-180');
                 });
-
                 if (!isOpen) {
-                    optionsBox.classList.remove('hidden');
-                    setTimeout(() => optionsBox.classList.add('opacity-100'), 10);
+                    optionsBox.classList.remove('hidden'); setTimeout(() => optionsBox.classList.add('opacity-100'), 10);
                     icon.classList.add('rotate-180');
                 }
             });
@@ -342,113 +236,145 @@
                 });
             });
         });
-
-        // کلیک در بیرون از منو برای بستن آن
         document.addEventListener('click', () => {
             document.querySelectorAll('.dropdown-options').forEach(box => {
-                box.classList.remove('opacity-100');
-                setTimeout(() => box.classList.add('hidden'), 200);
+                box.classList.remove('opacity-100'); setTimeout(() => box.classList.add('hidden'), 200);
                 box.previousElementSibling.querySelector('i').classList.remove('rotate-180');
             });
         });
 
-        // Handle File Selection (ارور کدهای تکراری برطرف شد)
         function handleFileSelect(event) {
             const file = event.target.files[0];
-            if (file) {
-                const nameDisplay = document.getElementById('file-name');
-                nameDisplay.innerText = `فایل انتخاب شد: ${file.name}`;
-                nameDisplay.classList.remove('hidden');
-            }
+            if (file) { document.getElementById('file-name').innerText = `انتخاب شد: ${file.name}`; document.getElementById('file-name').classList.remove('hidden'); }
         }
 
         function handleSampleSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const nameDisplay = document.getElementById('sample-name');
-                nameDisplay.innerText = `نمونه اضافه شد: ${file.name}`;
-                nameDisplay.classList.remove('hidden');
+            customVoiceFile = event.target.files[0];
+            if (customVoiceFile) {
+                const previewURL = URL.createObjectURL(customVoiceFile);
+                document.getElementById('recorded-audio').src = previewURL;
+                document.getElementById('sample-name').innerText = `فایل انتخاب شد: ${customVoiceFile.name}`;
+                document.getElementById('custom-audio-preview').classList.remove('hidden');
             }
         }
 
-        // =========================================
-        // فاز 4: اتصال واقعی به سرور پردازشی هوش مصنوعی
-        // =========================================
-        
-        // 🛑 هر بار که گوگل کولب را اجرا می‌کنی، لینک جدید را اینجا بگذار:
-        const AI_SERVER_URL = "https://e7eba01b20a6305f5f.gradio.live/"; 
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        async function toggleRecording() {
+            const btn = document.getElementById('record-btn');
+            const icon = document.getElementById('record-icon');
+            const text = document.getElementById('record-text');
+
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = e => { if(e.data.size > 0) audioChunks.push(e.data); };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        // تبدیل Blob به File برای ارسال به سرور
+                        customVoiceFile = new File([audioBlob], "recorded_voice.webm", { type: 'audio/webm' });
+                        
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        document.getElementById('recorded-audio').src = audioUrl;
+                        document.getElementById('sample-name').innerText = "صدای ضبط شده شما آماده است";
+                        document.getElementById('custom-audio-preview').classList.remove('hidden');
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    btn.classList.add('recording');
+                    icon.classList.replace('fa-microphone', 'fa-stop');
+                    text.innerText = "توقف ضبط";
+                } catch (err) {
+                    showToast("دسترسی به میکروفون داده نشد یا پشتیبانی نمی‌شود.");
+                }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                btn.classList.remove('recording');
+                icon.classList.replace('fa-stop', 'fa-microphone');
+                text.innerText = "ضبط مجدد";
+            }
+        }
+
+        function cancelProcessing() {
+            isProcessingCancelled = true;
+            document.getElementById('ad-overlay').style.display = 'none';
+            showToast("عملیات با موفقیت لغو شد.", false);
+        }
 
         async function processAudio(mode) {
-            let isValid = false;
+            isProcessingCancelled = false; // ریست کردن وضعیت لغو
             let inputs = [];
-            let endpointIndex = 0; // تب اول (متن به صدا) در سرور صفر است، تب دوم 1 است
+            let apiEndpoint = "";
 
             if (mode === 'tts') {
                 const text = document.getElementById('tts-input').value;
                 const voice = document.getElementById('tts-voice').value;
-                if (!text.trim()) { showToast('لطفا متنی را برای پردازش وارد کنید.'); return; }
-                
+                if (!text.trim()) { showToast('لطفا متنی را وارد کنید.'); return; }
                 inputs = [text, voice];
-                endpointIndex = 0; // فراخوانی تابع tts_wrapper در سرور
-                isValid = true;
-                
+                apiEndpoint = "/tts";
             } else if (mode === 'v2v') {
                 const file = document.getElementById('file-upload').files[0];
                 const model = document.getElementById('v2v-model').value;
-                if (!file) { showToast('لطفا ابتدا یک فایل صوتی آپلود کنید.'); return; }
-                
+                if (!file) { showToast('ابتدا صدای مبدأ را آپلود کنید.'); return; }
                 inputs = [file, model];
-                endpointIndex = 1; // فراخوانی تابع process_v2v در سرور
-                isValid = true;
-                
+                apiEndpoint = "/v2v";
             } else if (mode === 'custom') {
-                showToast('این قابلیت نیازمند پردازش دو مرحله‌ای است و در آپدیت بعدی سرور فعال می‌شود.');
-                return;
+                const text = document.getElementById('custom-text-input').value;
+                if (!customVoiceFile) { showToast('ابتدا صدا را ضبط یا آپلود کنید.'); return; }
+                if (!text.trim()) { showToast('متن مورد نظر را وارد کنید.'); return; }
+                inputs = [customVoiceFile, text];
+                apiEndpoint = "/custom";
             }
 
-            if (isValid) {
-                const overlay = document.getElementById('ad-overlay');
-                const queueStatus = document.getElementById('queue-status');
-                const resultSection = document.getElementById('result-section');
-                const audioPlayer = document.getElementById('audio-player');
+            const overlay = document.getElementById('ad-overlay');
+            const queueStatus = document.getElementById('queue-status');
+            const resultSection = document.getElementById('result-section');
+            const audioPlayer = document.getElementById('audio-player');
 
-                overlay.style.display = 'flex';
-                resultSection.classList.add('hidden');
-                queueStatus.innerText = "در حال اتصال به سرور هوش مصنوعی...";
+            overlay.style.display = 'flex';
+            resultSection.classList.add('hidden');
+            queueStatus.innerText = "در حال اتصال به سرور...";
 
-                try {
-                    // منتظر می‌مانیم تا کتابخانه هوش مصنوعی لود شود
-                    while(!window.gradioClient) {
-                        await new Promise(r => setTimeout(r, 100));
-                    }
-                    
-                    queueStatus.innerText = "در حال تولید صدا... (ممکن است چند ثانیه طول بکشد)";
-                    
-                    // تنظیم تایم‌اوت برای جلوگیری از گیر کردن بی‌نهایت
-                    const timeoutPromise = new Promise((_, reject) => 
-                        setTimeout(() => reject(new Error("سرور هوش مصنوعی پاسخ نداد (Timeout)")), 40000)
-                    );
+            try {
+                // منتظر می‌مانیم تا کتابخانه لود شود
+                while(!window.GradioClient) { await new Promise(r => setTimeout(r, 100)); }
+                queueStatus.innerText = "در حال تولید صدا... (صبور باشید)";
+                
+                // اتصال به سرور
+                const app = await window.GradioClient(AI_SERVER_URL);
+                
+                // ارسال درخواست به جای Endpoint Index، دقیقاً اسم API را صدا می‌زنیم
+                const result = await app.predict(apiEndpoint, inputs);
 
-                    // 1. اتصال به سرور
-                    const app = await window.gradioClient(AI_SERVER_URL);
-                    
-                    // 2. ارسال اطلاعات و دریافت نتیجه (با تایم‌اوت 40 ثانیه‌ای)
-                    const result = await Promise.race([
-                        app.predict(endpointIndex, inputs),
-                        timeoutPromise
-                    ]);
+                // اگر کاربر دکمه لغو را زده باشد، دیگر خروجی را نشان نمی‌دهیم
+                if (isProcessingCancelled) return;
 
-                    // 3. استخراج لینک فایل صوتی
-                    // ایجاد ویبره موفقیت در گوشی کاربر
-                    if (tg && tg.HapticFeedback) {
-                        tg.HapticFeedback.notificationOccurred('success');
-                    }
+                // بررسی صحت خروجی و استخراج URL
+                if (result && result.data && result.data[0]) {
+                    // در نسخه جدید Gradio، معمولاً خروجی فایل به صورت یک شیء برمی‌گردد که url دارد
+                    const fileUrl = typeof result.data[0] === 'string' ? result.data[0] : result.data[0].url;
                     
-                } catch (error) {
-                    console.error("API Error:", error);
+                    audioPlayer.src = fileUrl;
+                    resultSection.classList.remove('hidden');
                     overlay.style.display = 'none';
-                    showToast('خطا در ارتباط با سرور! آیا لینک کولب روشن است؟');
+                    if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                } else {
+                    throw new Error("خروجی سرور نامعتبر است");
                 }
+                
+            } catch (error) {
+                if (isProcessingCancelled) return;
+                console.error("API Error:", error);
+                overlay.style.display = 'none';
+                showToast('خطا در سرور! آیا لینک کولب جدید را قرار داده‌اید؟');
             }
         }
     </script>
