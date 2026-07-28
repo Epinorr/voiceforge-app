@@ -166,8 +166,8 @@
     </div>
 
     <script type="module">
-        // استفاده از نسخه ۱ به بالا برای جلوگیری از تداخل ورژن
-        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+        // پین کردن نسخه به 1.4.0 برای جلوگیری از تداخل آپدیت‌های آینده
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@1.4.0/dist/index.min.js";
         window.GradioClient = Client;
     </script>
 
@@ -181,7 +181,7 @@
         // ==========================================
         // 🛑 لینک جدید کولب را فقط اینجا قرار بده 🛑
         // ==========================================
-        const AI_SERVER_URL = "https://3684701cbee9630c26.gradio.live/?v2"; 
+        const AI_SERVER_URL = "https://f70f07e08b74034aac.gradio.live/?v=4"; 
         
         let isProcessingCancelled = false; // پرچم دکمه لغو
         let customVoiceFile = null; // ذخیره فایل صدای ضبط شده/آپلود شده
@@ -348,10 +348,10 @@
                 while(!window.GradioClient) { await new Promise(r => setTimeout(r, 100)); }
                 queueStatus.innerText = "در حال تولید صدا... (صبور باشید)";
                 
-                // اتصال به سرور
-                const app = await window.GradioClient(AI_SERVER_URL);
+                // اتصال به سرور (آپدیت شده با دستور جدید connect)
+                const app = await window.GradioClient.connect(AI_SERVER_URL);
                 
-                // ارسال درخواست به جای Endpoint Index، دقیقاً اسم API را صدا می‌زنیم
+                // ارسال درخواست
                 const result = await app.predict(apiEndpoint, inputs);
 
                 // اگر کاربر دکمه لغو را زده باشد، دیگر خروجی را نشان نمی‌دهیم
@@ -374,7 +374,8 @@
                 if (isProcessingCancelled) return;
                 console.error("API Error:", error);
                 overlay.style.display = 'none';
-                showToast('خطا در سرور! آیا لینک کولب جدید را قرار داده‌اید؟');
+                // نمایش متن دقیق ارور برای عیب‌یابی بهتر
+                showToast('خطا: ' + (error.message || 'مشکل در ارتباط با سرور'));
             }
         }
     </script>
